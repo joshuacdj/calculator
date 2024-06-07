@@ -119,13 +119,23 @@ numberBtns.forEach(numBtn => {
 
         let num = numBtn.textContent;
 
-        if (isRecentOp(currCalc)) {
-            currCalc += " ";
+        // Prevent keying in of leading zeros
+        if ((!currCalc && num === "0") || (isRecentOp(currCalc) && num === "0")) {
+
+            /*blank*/
+
+        } else {
+
+            if (isRecentOp(currCalc)) {
+                currCalc += " ";
+            }
+    
+            currCalc += num;
+    
+            currDisplay.textContent = currCalc;
+
         }
-
-        currCalc += num;
-
-        currDisplay.textContent = currCalc;
+    
     });
 });
 
