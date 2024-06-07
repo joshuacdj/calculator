@@ -139,18 +139,46 @@ opBtns.forEach(opBtn => {
         op = opBtn.textContent;
 
         // If there is already an operator AND if recent is a number, pressing anymore operators should do nothing
-        if (containsOp(currCalc) && isRecentNumber(currCalc)) {
+        if ((containsOp(currCalc) && isRecentNumber(currCalc)) || !currCalc) {
             /* BLANK */
         } else if (isRecentOp(currCalc)) { // prevent multiple operators in succession
             currCalc = currCalc.substring(0, currCalc.length - 1);
             currCalc += " " + op;
         } else {
             currCalc += " " + op;
-        }
+        } 
 
-    
+        currDisplay.textContent = currCalc;
     })
 })
+
+
+// equals button event listener
+const equalsBtn = document.querySelector("#equals");
+
+const prevDisplay = document.querySelector(".prev-calc");
+
+equalsBtn.addEventListener("click", event => {
+
+    // Update the prevDisplay whenever equals is pressed
+    prevCalc = currCalc + " =";
+    prevDisplay.textContent = prevCalc;
+
+
+    let numsArray = calcToArray(currCalc);
+    // Calculate the answer
+    let ans = operate(parseInt(numsArray[0], 10), parseInt(numsArray[1], 10), op);
+
+    currCalc = "" + ans;
+
+    currDisplay.textContent = currCalc;
+
+});
+
+
+// Function to clear everything
+// Clearing everything means 1: res
+
 
 
 
