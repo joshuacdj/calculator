@@ -219,8 +219,28 @@ equalsBtn.addEventListener("click", event => {
     numsArray[0] = numsArray[0].replace("–", "-");
     numsArray[2] = numsArray[2].replace("–", "-");
 
+    let num1 = 0;
+    let num2 = 0;
+
+    if (numsArray[0].includes(".")) { 
+        num1 = parseFloat(numsArray[0], 10);
+    } else {
+        num1 = parseInt(numsArray[0], 10);
+    }
+
+    if (numsArray[2].includes(".")) {
+        num2 = parseFloat(numsArray[2], 10);
+    } else {
+        num2 = parseInt(numsArray[2], 10);
+    }
+
+
     // Calculate the answer
-    let ans = operate(parseInt(numsArray[0], 10), parseInt(numsArray[2], 10), op);
+    let ans = operate(num1, num2, op);
+
+    if (ans % 1 !== 0) {
+        ans = ans.toFixed(12);
+    }
 
     currCalc = "" + ans;
 
@@ -312,14 +332,13 @@ decBtn.addEventListener("click", event => {
             return;
         }
 
-        // If the most recent number is empty, add a 0 before the decimal point
-        if (!arr[arr.length - 1]) {
+        // If the most recent number is empty or is negative, add a 0 before the decimal point
+        if (!arr[arr.length - 1] || arr[arr.length - 1] === "–") {
             currCalc += "0.";
         } else {
             currCalc += ".";
         }
 
-    
         currDisplay.textContent = currCalc;
     
     });
