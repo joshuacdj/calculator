@@ -1,3 +1,4 @@
+const MAXDISPLAYLENGTH = 34;
 
 function add(a, b) {
 
@@ -141,6 +142,11 @@ numberBtns.forEach(numBtn => {
 
     numBtn.addEventListener("click", event => {
 
+        // If the display is full, do nothing
+        if (currCalc.length === 33) {
+            return;
+        }
+
         // If the recentType is equals, clear everything
         if (recentType === "equals") {
             clearEvery();
@@ -171,6 +177,11 @@ opBtns.forEach(opBtn => {
 
     opBtn.addEventListener("click", event => {
 
+        // If operator is the 33rd character, do nothing
+        if (currCalc.length === 33) {
+            return;
+        }
+
         recentType = "operator";
 
         op = opBtn.textContent;
@@ -187,7 +198,6 @@ opBtns.forEach(opBtn => {
         currDisplay.textContent = currCalc;
     })
 })
-
 
 // equals button event listener
 const equalsBtn = document.querySelector("#equals");
@@ -262,6 +272,11 @@ const negBtn = document.querySelector("#neg");
 
 negBtn.addEventListener("click", event => {
 
+    // If negative is the 33rd character, do nothing
+    if (currCalc.length === 33) {
+        return;
+    }
+
     recentType = "neg";
 
     // Either empty (first number is negative)
@@ -318,6 +333,11 @@ const decBtn = document.querySelector("#dec");
 decBtn.addEventListener("click", event => {
     
         recentType = "dec";
+
+        // If the decimal is the 33rd character, do nothing
+        if (currCalc.length === 33) {
+            return;
+        }
     
         // If the most recent button pressed was an operator, add a space before the decimal point
         if (isRecentOp(currCalc)) {
@@ -341,5 +361,5 @@ decBtn.addEventListener("click", event => {
 
         currDisplay.textContent = currCalc;
     
-    });
+});
 
