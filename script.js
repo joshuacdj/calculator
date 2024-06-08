@@ -197,14 +197,16 @@ equalsBtn.addEventListener("click", event => {
 
     let numsArray = calcToArray(currCalc);
 
-    // Deal with negative numbers '`' en dash symbol used to differentiate
-    numsArray[0] = numsArray[0].replace("`", "-");
-    numsArray[2] = numsArray[2].replace("`", "-");
+    // Deal with negative numbers '–' en dash symbol used to differentiate
+    numsArray[0] = numsArray[0].replace("–", "-");
+    numsArray[2] = numsArray[2].replace("–", "-");
 
     // Calculate the answer
     let ans = operate(parseInt(numsArray[0], 10), parseInt(numsArray[2], 10), op);
 
     currCalc = "" + ans;
+
+    currCalc = currCalc.replace("-", "–");
 
     currDisplay.textContent = currCalc;
 
@@ -227,11 +229,11 @@ negBtn.addEventListener("click", event => {
 
     if (!currCalc) {
 
-        currCalc += "`";
+        currCalc += "–";
 
     } else if (isRecentOp(currCalc)) {
 
-        currCalc += " `";
+        currCalc += " –";
     }
 
     currDisplay.textContent = currCalc;
