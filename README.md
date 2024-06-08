@@ -12,10 +12,7 @@ This is a basic calculator project that allows you to perform simple operations.
 To get started with the calculator project, follow these steps:
 1. Clone the repository: `git clone git@github.com:joshuacdj/calculator.git`
 2. Navigate to the project directory: `cd calculator`
-3. Run the calculator:  
-```bash
-node calculator.js
-```
+3. Open the `index.html` file in a web browser to run the calculator.
 
 Feel free to modify the code and add more functionality to the calculator as per your requirements.
 
