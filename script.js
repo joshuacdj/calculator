@@ -277,35 +277,50 @@ clearEntryBtn.addEventListener("click", event => {
 });
 
 
+// function to check that there is only one decimal point in a number. The decimal point cannot be the end of the number and there cannot be two decimal points in a number
+function validDecimal(num) {
 
+    let count = 0;
 
+    for (let i = 0; i < num.length; i++) {
 
+        if (num[i] === ".") {
+            count++;
+        }
+    }
 
+    return (count === 1 && num[num.length - 1] !== ".");
+}
 
+// dec button event listener
+const decBtn = document.querySelector("#dec");
 
+decBtn.addEventListener("click", event => {
+    
+        recentType = "dec";
+    
+        // If the most recent button pressed was an operator, add a space before the decimal point
+        if (isRecentOp(currCalc)) {
+            currCalc += " ";
+        }
 
+        // Split the current calculation into an array
+        let arr = currCalc.split(" ");
 
+        // If the most recent number has a decimal point, do nothing
+        if (arr[arr.length - 1].includes(".")) {
+            return;
+        }
 
+        // If the most recent number is empty, add a 0 before the decimal point
+        if (!arr[arr.length - 1]) {
+            currCalc += "0.";
+        } else {
+            currCalc += ".";
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
+        currDisplay.textContent = currCalc;
+    
+    });
 
