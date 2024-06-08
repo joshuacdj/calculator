@@ -48,23 +48,30 @@ function isOp(op) {
 
 function calcToArray(calc) {
 
-    let start = 0;
-    let end = 0;
+    // let start = 0;
+    // let end = 0;
 
-    // Stop when the operator is met
-    while (!isOp(calc[end])) {
+    // // Stop when the operator is met
+    // while (!isOp(calc[end])) {
 
-        end++;
-    }
+    //     end++;
+    // }
 
-    let num1 = calc.slice(start, end - 1);
+    // let num1 = calc.slice(start, end - 1);
 
-    // skip the whitespace as well and on to the start of num2
-    start = end + 2;
+    // // skip the whitespace as well and on to the start of num2
+    // start = end + 2;
 
-    let num2 = calc.slice(start, calc.length);
-    let arr = [num1, num2];
+    // let num2 = calc.slice(start, calc.length);
+    // let arr = [num1, num2];
 
+    // return arr;
+
+    let arr = calc.split(" ");
+
+    console.log(arr[0]);
+    console.log(arr[1]);
+    console.log(arr[2]);
     return arr;
 }
 
@@ -108,6 +115,19 @@ function isRecentOp(currCalc) {
     return ops.includes(currCalc[currCalc.length - 1]);
 }
 
+// Function to clear everything
+// Clearing everything means 1) prevCalc and display is reset, 2) currCalc and display is cleared, 3) op is cleared
+function clearEvery() {
+
+    prevCalc = "~";
+    prevDisplay.textContent = prevCalc;
+
+    currCalc = "";
+    currDisplay.textContent = currCalc;
+
+    op = "";
+}
+
 const numberBtns = document.querySelectorAll(".number");
 
 const currDisplay = document.querySelector(".curr-calc");
@@ -120,11 +140,12 @@ numberBtns.forEach(numBtn => {
         let num = numBtn.textContent;
 
         // Prevent keying in of leading zeros
-        if ((!currCalc && num === "0") || (isRecentOp(currCalc) && num === "0")) {
+        // if ((!currCalc && num === "0") || (isRecentOp(currCalc) && num === "0")) {
 
-            /*blank*/
+        //     /*blank*/
 
-        } else {
+        // } else {
+
 
             if (isRecentOp(currCalc)) {
                 currCalc += " ";
@@ -134,7 +155,7 @@ numberBtns.forEach(numBtn => {
     
             currDisplay.textContent = currCalc;
 
-        }
+        // }
     
     });
 });
@@ -148,10 +169,9 @@ opBtns.forEach(opBtn => {
 
         op = opBtn.textContent;
 
-        // If there is already an operator AND if recent is a number, pressing anymore operators should do nothing
-        if ((containsOp(currCalc) && isRecentNumber(currCalc)) || !currCalc) {
+       if (containsOp(currCalc)) {
             /* BLANK */
-        } else if (isRecentOp(currCalc)) { // prevent multiple operators in succession
+        }   else if (isRecentOp(currCalc)) { // prevent multiple operators in succession
             currCalc = currCalc.substring(0, currCalc.length - 1);
             currCalc += " " + op;
         } else {
@@ -176,8 +196,13 @@ equalsBtn.addEventListener("click", event => {
 
 
     let numsArray = calcToArray(currCalc);
+
+    // Deal with negative numbers '`' en dash symbol used to differentiate
+    numsArray[0] = numsArray[0].replace("`", "-");
+    numsArray[2] = numsArray[2].replace("`", "-");
+
     // Calculate the answer
-    let ans = operate(parseInt(numsArray[0], 10), parseInt(numsArray[1], 10), op);
+    let ans = operate(parseInt(numsArray[0], 10), parseInt(numsArray[2], 10), op);
 
     currCalc = "" + ans;
 
@@ -186,8 +211,36 @@ equalsBtn.addEventListener("click", event => {
 });
 
 
-// Function to clear everything
-// Clearing everything means 1: res
+// C button to clear everything eventlistener
+const clearBtn = document.querySelector("#clear");
+
+clearBtn.addEventListener("click", clearEvery);
+
+
+// neg button
+const negBtn = document.querySelector("#neg");
+
+negBtn.addEventListener("click", event => {
+
+    // Either empty (first number is negative)
+    // Or right before is an operator (second number is negative)
+
+    if (!currCalc) {
+
+        currCalc += "`";
+
+    } else if (isRecentOp(currCalc)) {
+
+        currCalc += " `";
+    }
+
+    currDisplay.textContent = currCalc;
+
+})
+
+
+
+
 
 
 
