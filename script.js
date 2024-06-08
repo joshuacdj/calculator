@@ -46,32 +46,34 @@ function isOp(op) {
     return (op === "+" || op === "-" || op === "÷" || op === "x");
 }
 
-function calcToArray(calc) {
-
-    // let start = 0;
-    // let end = 0;
-
-    // // Stop when the operator is met
-    // while (!isOp(calc[end])) {
-
-    //     end++;
-    // }
-
-    // let num1 = calc.slice(start, end - 1);
-
-    // // skip the whitespace as well and on to the start of num2
-    // start = end + 2;
-
-    // let num2 = calc.slice(start, calc.length);
-    // let arr = [num1, num2];
-
-    // return arr;
+// Check for the count of numbers in the calculation
+// There can be 1 number only or 2 numbers
+function getCountOfNums(calc) { 
 
     let arr = calc.split(" ");
 
-    console.log(arr[0]);
-    console.log(arr[1]);
-    console.log(arr[2]);
+    let count = 0;
+
+    if (arr[0]) {
+        count++;
+    }
+
+    if (arr[2]) {
+        count++;
+    }
+    
+    return count;
+}
+
+function calcToArray(calc) {
+
+
+    let arr = calc.split(" ");
+
+// console.log(arr[0]);
+// console.log(arr[1]);
+// console.log(arr[2]);
+
     return arr;
 }
 
@@ -80,6 +82,8 @@ let op = "";
 let currCalc = "";
 let prevCalc = "";
 
+// Store the most recently pressed button type
+let recentType = "";
 
 // Function to check whether most recently pressed was a number or not
 function isRecentNumber(currCalc) {
@@ -137,25 +141,25 @@ numberBtns.forEach(numBtn => {
 
     numBtn.addEventListener("click", event => {
 
+        // If the recentType is equals, clear everything
+        if (recentType === "equals") {
+            clearEvery();
+        }
+
+        recentType = "number";
+
         let num = numBtn.textContent;
-
-        // Prevent keying in of leading zeros
-        // if ((!currCalc && num === "0") || (isRecentOp(currCalc) && num === "0")) {
-
-        //     /*blank*/
-
-        // } else {
-
-
-            if (isRecentOp(currCalc)) {
-                currCalc += " ";
-            }
     
-            currCalc += num;
-    
-            currDisplay.textContent = currCalc;
+        // If the most recent button pressed was an operator, add a space before the number
+        if (isRecentOp(currCalc)) {
+            currCalc += " ";
+        }
 
-        // }
+        currCalc += num;
+
+        currDisplay.textContent = currCalc;
+
+        
     
     });
 });
@@ -167,9 +171,11 @@ opBtns.forEach(opBtn => {
 
     opBtn.addEventListener("click", event => {
 
+        recentType = "operator";
+
         op = opBtn.textContent;
 
-       if (containsOp(currCalc)) {
+       if (containsOp(currCalc) || !currCalc) {
             /* BLANK */
         }   else if (isRecentOp(currCalc)) { // prevent multiple operators in succession
             currCalc = currCalc.substring(0, currCalc.length - 1);
@@ -190,10 +196,22 @@ const prevDisplay = document.querySelector(".prev-calc");
 
 equalsBtn.addEventListener("click", event => {
 
+    // If there is no currDisplay, do nothing
+    if (!currCalc) {
+        return;
+    }
+
+    // If there is only one number, do nothing
+    if (getCountOfNums(currCalc) === 1) {
+        return;
+    }
+
+    // Update recentType
+    recentType = "equals";
+
     // Update the prevDisplay whenever equals is pressed
     prevCalc = currCalc + " =";
     prevDisplay.textContent = prevCalc;
-
 
     let numsArray = calcToArray(currCalc);
 
@@ -224,6 +242,8 @@ const negBtn = document.querySelector("#neg");
 
 negBtn.addEventListener("click", event => {
 
+    recentType = "neg";
+
     // Either empty (first number is negative)
     // Or right before is an operator (second number is negative)
 
@@ -239,6 +259,22 @@ negBtn.addEventListener("click", event => {
     currDisplay.textContent = currCalc;
 
 })
+
+// Clear entry button which clears the most recent entry
+const clearEntryBtn = document.querySelector("#clear-entry");
+
+clearEntryBtn.addEventListener("click", event => {
+
+    // If the most recent button pressed was an operator, remove the operator
+    if (isRecentOp(currCalc) || currCalc[currCalc.length - 1] === " ") {
+        currCalc = currCalc.substring(0, currCalc.length - 2);
+    } else {
+        currCalc = currCalc.substring(0, currCalc.length - 1);
+    }
+
+    currDisplay.textContent = currCalc;
+
+});
 
 
 
